@@ -1,0 +1,103 @@
+{
+    "personalInfo": {
+        "name": "黄先生",
+        "title": "全栈开发者 & 技术爱好者",
+        "description": "专注于创造优雅、高效的数字解决方案。热爱新技术，致力于用代码改变世界。",
+        "location": "中国，上海",
+        "email": "your.email@example.com",
+        "phone": "+86 138 0000 0000"
+    },
+    "about": {
+        "introduction": "我是一名充满热情的全栈开发者，拥有多年的编程经验。我热爱学习新技术，喜欢挑战复杂的问题，并致力于创建用户友好的应用程序。",
+        "experience": "在我的职业生涯中，我参与了多个项目，从前端界面设计到后端系统架构，我都有丰富的实践经验。我相信良好的代码不仅仅是功能的实现，更是艺术的表达。",
+        "stats": {
+            "projects": "50+",
+            "experience": "3+",
+            "commits": "100+"
+        }
+    },
+    "skills": {
+        "languages": [
+            "JavaScript",
+            "Python",
+            "Java",
+            "TypeScript",
+            "C++",
+            "Go"
+        ],
+        "frontend": [
+            "React",
+            "Vue.js",
+            "Angular",
+            "HTML5",
+            "CSS3",
+            "Sass",
+            "Tailwind CSS"
+        ],
+        "backend": [
+            "Node.js",
+            "Express",
+            "Django",
+            "Spring Boot",
+            "FastAPI",
+            "GraphQL"
+        ],
+        "tools": [
+            "Git",
+            "Docker",
+            "AWS",
+            "Linux",
+            "Figma",
+            "Webpack"
+        ]
+    },
+    "projects": [
+        {
+            "title": "电商平台",
+            "description": "基于React和Node.js的全栈电商解决方案，包含用户管理、商品展示、购物车、支付等完整功能。",
+            "technologies": [
+                "React",
+                "Node.js",
+                "MongoDB",
+                "Stripe"
+            ],
+            "github": "https://github.com/HUANGsir-JH/ecommerce-project",
+            "demo": "https://demo-ecommerce.example.com"
+        },
+        {
+            "title": "任务管理应用",
+            "description": "一个功能丰富的任务管理工具，支持团队协作、进度跟踪、文件分享等功能，提高工作效率。",
+            "technologies": [
+                "Vue.js",
+                "Express",
+                "PostgreSQL",
+                "Socket.io"
+            ],
+            "github": "https://github.com/HUANGsir-JH/task-manager",
+            "demo": "https://demo-tasks.example.com"
+        },
+        {
+            "title": "天气预报应用",
+            "description": "美观的天气应用，提供实时天气信息、7天预报、多城市管理等功能，界面简洁优雅。",
+            "technologies": [
+                "JavaScript",
+                "CSS3",
+                "API",
+                "PWA"
+            ],
+            "github": "https://github.com/HUANGsir-JH/weather-app",
+            "demo": "https://demo-weather.example.com"
+        }
+    ],
+    "socialLinks": {
+        "github": "https://github.com/HUANGsir-JH",
+        "linkedin": "https://linkedin.com/in/yourprofile",
+        "twitter": "https://twitter.com/yourhandle",
+        "instagram": "https://instagram.com/yourhandle"
+    },
+    "theme": {
+        "primaryColor": "#667eea",
+        "secondaryColor": "#764ba2",
+        "accentColor": "#f093fb"
+    }
+}
