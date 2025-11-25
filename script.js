@@ -117,6 +117,28 @@ function initSkillsSection() {
 }
 
 // ============================================
+// 辅助函数
+// ============================================
+
+function formatDescription(text) {
+    if (!text) return '';
+
+    // 检查是否包含编号列表 (如 "1. ", "2. ")
+    if (text.includes('1. ')) {
+        // 使用正则表达式分割，匹配数字加点和空格
+        const parts = text.split(/(?:\d+\.\s)/).filter(part => part.trim());
+
+        if (parts.length > 0) {
+            return `<ul class="description-list">
+                ${parts.map(part => `<li>${part.trim()}</li>`).join('')}
+            </ul>`;
+        }
+    }
+
+    return text;
+}
+
+// ============================================
 // 项目展示部分
 // ============================================
 
@@ -149,7 +171,7 @@ function initProjectsSection() {
                 </div>
                 <div class="project-content">
                     <h3 class="project-title">${project.title}</h3>
-                    <p class="project-description">${project.description}</p>
+                    <div class="project-description">${formatDescription(project.description)}</div>
                     <div class="project-tech">
                         ${project.technologies.map(tech => `<span class="tech-badge">${tech}</span>`).join('')}
                     </div>
@@ -176,7 +198,7 @@ function initExperienceSection() {
                     <span class="timeline-time">${activity.time}</span>
                     <h3 class="timeline-role">${activity.role}</h3>
                     <p class="timeline-department">${activity.department}</p>
-                    <p class="timeline-description">${activity.description}</p>
+                    <div class="timeline-description">${formatDescription(activity.description)}</div>
                 </div>
             </div>
         `;
