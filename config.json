@@ -1,17 +1,18 @@
 {
     "personalInfo": {
-        "name": "黄先生",
-        "title": "全栈开发者 & 技术爱好者",
-        "description": "专注于创造优雅、高效的数字解决方案。热爱新技术，致力于用代码改变世界。",
-        "location": "中国，上海",
-        "email": "your.email@example.com",
-        "phone": "+86 138 0000 0000"
+        "name": "黄杰豪",
+        "title": "Java开发者 | 全栈工程师",
+        "description": "AI时代，设计轮子应该是关键能力",
+        "location": "中国，深圳",
+        "email": "3298233204@qq.com",
+        "phone": "+86 13026615348",
+        "github": "https://github.com/HUANGsir-JH",
+        "avatar": "/assets/avatar.jpg"
     },
     "about": {
-        "introduction": "我是一名充满热情的全栈开发者，拥有多年的编程经验。我热爱学习新技术，喜欢挑战复杂的问题，并致力于创建用户友好的应用程序。",
-        "experience": "在我的职业生涯中，我参与了多个项目，从前端界面设计到后端系统架构，我都有丰富的实践经验。我相信良好的代码不仅仅是功能的实现，更是艺术的表达。",
+        "introduction": "我是一名充满热情的全栈开发者，拥有多个项目的编程经验。我热爱学习新技术，喜欢挑战复杂的问题，善于在AI时代中寻找创新的解决方案。",
         "stats": {
-            "projects": "50+",
+            "projects": "30",
             "experience": "3+",
             "commits": "100+"
         }
@@ -22,82 +23,98 @@
             "Python",
             "Java",
             "TypeScript",
-            "C++",
             "Go"
         ],
         "frontend": [
-            "React",
             "Vue.js",
-            "Angular",
             "HTML5",
             "CSS3",
-            "Sass",
-            "Tailwind CSS"
+            "Uniapp"
         ],
         "backend": [
-            "Node.js",
-            "Express",
-            "Django",
             "Spring Boot",
-            "FastAPI",
-            "GraphQL"
+            "Spring Cloud",
+            "Spring Cloud Alibaba",
+            "Gin"
         ],
         "tools": [
             "Git",
             "Docker",
-            "AWS",
-            "Linux",
-            "Figma",
-            "Webpack"
+            "Linux"
         ]
     },
     "projects": [
         {
-            "title": "电商平台",
-            "description": "基于React和Node.js的全栈电商解决方案，包含用户管理、商品展示、购物车、支付等完整功能。",
+            "title": "小智医疗智能体",
+            "description": "1. 基于 Qwen 大模型搭建医疗知识库问答系统，实现上下文感知对话，支持挂号预约等工具调用功能，测试集意图识别准确率达88%，解决传统客服无法执行复杂操作的问题。2. 设计双存储架构，对话记录持久化至本地 MongoDB，医疗知识向量库存储于云端 (Pinecone)，提升数据安全性与检索效率。3. 开发前端交互界面（Vue3），支持用户进行对话、查询预约记录，降低操作门槛。",
             "technologies": [
-                "React",
-                "Node.js",
+                "Vue3",
+                "Spring Boot",
                 "MongoDB",
-                "Stripe"
+                "Langhchain4j",
+                "RAG"
             ],
-            "github": "https://github.com/HUANGsir-JH/ecommerce-project",
-            "demo": "https://demo-ecommerce.example.com"
+            "github": "https://github.com/HUANGsir-JH/Langchain4j-XiaozhiAPP",
+            "coverImage": "/assets/xiaozhi.png"
         },
         {
-            "title": "任务管理应用",
-            "description": "一个功能丰富的任务管理工具，支持团队协作、进度跟踪、文件分享等功能，提高工作效率。",
+            "title": "动力云客管理系统",
+            "description": "1. 基于SpringSecurity和RBAC 模型实现多层级权限控制，通过 JWT 令牌认证与接口注解鉴权，确保资源安全访问。2. 利用 Spring AOP 动态切面，实现数据查询条件自动注入（如部门数据隔离），减少冗余代码80%，提升数据安全性。3. 设计 Redis 高频缓存策略（商品/客户信息），降低数据库负载。4. 基于EasyExcel进行数据的excel导入的导出操作，与前端对接进行文件的上传与下载",
             "technologies": [
-                "Vue.js",
-                "Express",
-                "PostgreSQL",
-                "Socket.io"
+                "Vue3",
+                "Spring Boot",
+                "MySQL",
+                "Redis",
+                "EasyExcel",
+                "JWT"
             ],
-            "github": "https://github.com/HUANGsir-JH/task-manager",
-            "demo": "https://demo-tasks.example.com"
+            "github": "https://github.com/HUANGsir-JH/dlyk_server",
+            "coverImage": "/assets/dlyk.png"
         },
         {
-            "title": "天气预报应用",
-            "description": "美观的天气应用，提供实时天气信息、7天预报、多城市管理等功能，界面简洁优雅。",
+            "title": "智慧养殖管理平台",
+            "description": "1. 设计并实现企业级多租户架构，基于SQL拦截器实现透明数据隔离，支持多企业并发访问，数据安全性100%。2. 开发高性能实时通信系统，采用WebSocket+SSE双重方案，支持多设备并发连接，实现毫秒异常信息推送。3. 构建混合数据存储架构，MySQL存储业务数据+MongoDB存储时序数据，查询性能提升300%，支持PB级数据扩展。" ,
             "technologies": [
-                "JavaScript",
-                "CSS3",
-                "API",
-                "PWA"
+                "Spring Boot",
+                "MySQL",
+                "MongoDB",
+                "WebSocket",
+                "SSE",
+                "Satoken",
+                "Mybatis Plus"
             ],
-            "github": "https://github.com/HUANGsir-JH/weather-app",
-            "demo": "https://demo-weather.example.com"
+            "github": "项目组版权原因，暂无公开仓库",
+            "coverImage": "/assets/smart-farm.png"
         }
     ],
     "socialLinks": {
         "github": "https://github.com/HUANGsir-JH",
-        "linkedin": "https://linkedin.com/in/yourprofile",
-        "twitter": "https://twitter.com/yourhandle",
-        "instagram": "https://instagram.com/yourhandle"
+        "wechat": "woshihuangjiehao"
     },
-    "theme": {
-        "primaryColor": "#667eea",
-        "secondaryColor": "#764ba2",
-        "accentColor": "#f093fb"
+    "schoolExperience": {
+        "university": "深圳大学",
+        "degree": "本科",
+        "major": "计算机科学与技术",
+        "duration": "2023 - 2027",
+        "activities": [
+            {
+                "time": "2023.10 - 2024.06",
+                "department": "计算机与软件学院学生代表委员会",
+                "role": "办公部干事",
+                "description": "1. 组织并记录10+场学代内部会议，整理会议纪要准确率100%。2. 与多个部⻔协同进⾏电话访谈、资料审核、资质评定等⼯作，效率提升20%。"
+            },
+            {
+                "time": "2025.08 - 2025.12",
+                "department": "深圳大学“显鹅易见”智慧养殖项目组",
+                "role": "系统开发负责人、后端开发工程师",
+                "description": "1. 负责设计数据库，项目结构，API设计等架构层面工作 2. 基于架构设计进行智慧养殖系统后端的开发工作，半个月完成第一轮开发，并在后续持续迭代更新版本 3. 协调前后端联调工作，与前端工程师密切合作，确保系统功能的顺利实现。 4. 探究摄像头视频流接入与处理方案，实现实时监控功能。并于算法端协作，完成智能异常行为检测告警模块。"
+            },
+            {
+                "time": "2025.11 - 2025.12",
+                "department": "软件工程微服务设计项目-校园社交平台",
+                "role": "项目架构师、前端开发负责人",
+                "description": "1. 负责设计数据库，API接口，项目搭建等架构层面工作 2. 领导前端团队，使用Vue3开发面向B端的用户、内容管理系统，审核系统，使用uniapp开发面向C端的微信小程序应用 3. 协调前后端联调工作，与后端工程师密切合作，确保系统功能的顺利实现。"
+            }
+        ]
     }
 }
