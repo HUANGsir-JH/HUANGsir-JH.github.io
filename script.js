@@ -1,322 +1,438 @@
-// Navigation Toggle
-const navToggle = document.querySelector('.nav-toggle');
-const navMenu = document.querySelector('.nav-menu');
+// ============================================
+// 配置数据加载
+// ============================================
 
-navToggle.addEventListener('click', () => {
-    navToggle.classList.toggle('active');
-    navMenu.classList.toggle('active');
-});
+let config = null;
 
-// Close mobile menu when clicking on a link
-document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
-    navToggle.classList.remove('active');
-    navMenu.classList.remove('active');
-}));
+// 加载配置文件
+async function loadConfig() {
+    try {
+        const response = await fetch('config.json');
+        config = await response.json();
+        initPage();
+    } catch (error) {
+        console.error('加载配置文件失败:', error);
+        // 使用默认配置
+        initPageWithDefaults();
+    }
+}
 
-// Smooth scrolling for navigation links
+// ============================================
+// 页面初始化
+// ============================================
+
+function initPage() {
+    initTypingEffect();
+    initAboutSection();
+    initSkillsSection();
+    initProjectsSection();
+    initExperienceSection();
+    initContactSection();
+    initScrollAnimations();
+    initNavbar();
+    initThemeToggle();
+    initBackToTop();
+    initParticles();
+    initCountUp();
+}
+
+function initPageWithDefaults() {
+    console.log('使用默认配置初始化页面');
+}
+
+// ============================================
+// 打字效果
+// ============================================
+
+function initTypingEffect() {
+    const nameElement = document.getElementById('typed-name');
+    const name = config?.personalInfo?.name || '黄杰豪';
+    let i = 0;
+
+    function typeWriter() {
+        if (i < name.length) {
+            nameElement.textContent += name.charAt(i);
+            i++;
+            setTimeout(typeWriter, 150);
+        }
+    }
+
+    // 延迟开始打字效果
+    setTimeout(typeWriter, 500);
+}
+
+// ============================================
+// 关于我部分
+// ============================================
+
+function initAboutSection() {
+    // 设置介绍文字
+    const introElement = document.getElementById('about-intro');
+    if (introElement && config?.about?.introduction) {
+        introElement.textContent = config.about.introduction;
+    }
+
+    // 设置教育信息
+    const educationElement = document.getElementById('education-info');
+    if (educationElement && config?.schoolExperience) {
+        const edu = config.schoolExperience;
+        educationElement.textContent = `${edu.university} · ${edu.major} · ${edu.degree} (${edu.duration})`;
+    }
+}
+
+// ============================================
+// 技术栈部分
+// ============================================
+
+function initSkillsSection() {
+    const container = document.getElementById('skills-container');
+    if (!container || !config?.skills) return;
+
+    const skillCategories = [
+        { key: 'languages', title: '编程语言', icon: 'fas fa-code', iconClass: 'languages' },
+        { key: 'frontend', title: '前端技术', icon: 'fas fa-palette', iconClass: 'frontend' },
+        { key: 'backend', title: '后端框架', icon: 'fas fa-server', iconClass: 'backend' },
+        { key: 'tools', title: '工具 & 其他', icon: 'fas fa-tools', iconClass: 'tools' }
+    ];
+
+    skillCategories.forEach(category => {
+        const skills = config.skills[category.key];
+        if (!skills || skills.length === 0) return;
+
+        const categoryHTML = `
+            <div class="skill-category fade-in">
+                <div class="skill-category-header">
+                    <div class="skill-category-icon ${category.iconClass}">
+                        <i class="${category.icon}"></i>
+                    </div>
+                    <h3 class="skill-category-title">${category.title}</h3>
+                </div>
+                <div class="skill-tags">
+                    ${skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                </div>
+            </div>
+        `;
+        container.innerHTML += categoryHTML;
+    });
+}
+
+// ============================================
+// 项目展示部分
+// ============================================
+
+function initProjectsSection() {
+    const container = document.getElementById('projects-container');
+    if (!container || !config?.projects) return;
+
+    config.projects.forEach((project, index) => {
+        const isValidGithub = project.github && project.github.startsWith('http');
+        const githubLink = isValidGithub
+            ? `<a href="${project.github}" target="_blank" class="project-link">
+                <i class="fab fa-github"></i>
+                <span>查看源码</span>
+               </a>`
+            : `<span class="project-link" style="opacity: 0.6; cursor: default;">
+                <i class="fas fa-lock"></i>
+                <span>暂未公开</span>
+               </span>`;
+
+        const projectHTML = `
+            <div class="project-card fade-in" style="transition-delay: ${index * 0.1}s">
+                <div class="project-image-wrapper">
+                    <img src="${project.coverImage || '/assets/project-default.png'}" 
+                         alt="${project.title}" 
+                         class="project-image"
+                         onerror="this.src='https://via.placeholder.com/400x200?text=${encodeURIComponent(project.title)}'">
+                    <div class="project-overlay">
+                        ${githubLink}
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">${project.title}</h3>
+                    <p class="project-description">${project.description}</p>
+                    <div class="project-tech">
+                        ${project.technologies.map(tech => `<span class="tech-badge">${tech}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        container.innerHTML += projectHTML;
+    });
+}
+
+// ============================================
+// 经历时间线部分
+// ============================================
+
+function initExperienceSection() {
+    const container = document.getElementById('experience-container');
+    if (!container || !config?.schoolExperience?.activities) return;
+
+    config.schoolExperience.activities.forEach((activity, index) => {
+        const timelineHTML = `
+            <div class="timeline-item fade-in" style="transition-delay: ${index * 0.15}s">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-time">${activity.time}</span>
+                    <h3 class="timeline-role">${activity.role}</h3>
+                    <p class="timeline-department">${activity.department}</p>
+                    <p class="timeline-description">${activity.description}</p>
+                </div>
+            </div>
+        `;
+        container.innerHTML += timelineHTML;
+    });
+}
+
+// ============================================
+// 联系方式部分
+// ============================================
+
+function initContactSection() {
+    if (!config?.personalInfo) return;
+
+    const emailElement = document.getElementById('contact-email');
+    const phoneElement = document.getElementById('contact-phone');
+    const wechatElement = document.getElementById('contact-wechat');
+
+    if (emailElement) emailElement.textContent = config.personalInfo.email;
+    if (phoneElement) phoneElement.textContent = config.personalInfo.phone;
+    if (wechatElement && config.socialLinks?.wechat) {
+        wechatElement.textContent = config.socialLinks.wechat;
+    }
+}
+
+// ============================================
+// 滚动动画
+// ============================================
+
+function initScrollAnimations() {
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    // 观察所有需要动画的元素
+    document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+// ============================================
+// 导航栏功能
+// ============================================
+
+function initNavbar() {
+    const navbar = document.getElementById('navbar');
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    // 滚动时添加阴影
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+
+        // 更新当前活动的导航链接
+        updateActiveNavLink();
+    });
+
+    // 移动端菜单切换
+    navToggle.addEventListener('click', () => {
+        navToggle.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    // 点击导航链接后关闭菜单
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        });
+    });
+}
+
+function updateActiveNavLink() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    let currentSection = '';
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.offsetHeight;
+
+        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+            currentSection = section.getAttribute('id');
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentSection}`) {
+            link.classList.add('active');
+        }
+    });
+}
+
+// ============================================
+// 主题切换
+// ============================================
+
+function initThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const icon = themeToggle.querySelector('i');
+
+    // 检查本地存储的主题设置
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(icon, savedTheme);
+    } else {
+        // 检查系统主题偏好
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            updateThemeIcon(icon, 'dark');
+        }
+    }
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(icon, newTheme);
+    });
+}
+
+function updateThemeIcon(icon, theme) {
+    if (theme === 'dark') {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+    }
+}
+
+// ============================================
+// 回到顶部按钮
+// ============================================
+
+function initBackToTop() {
+    const backToTop = document.getElementById('back-to-top');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// ============================================
+// 粒子背景效果
+// ============================================
+
+function initParticles() {
+    const container = document.getElementById('particles');
+    if (!container) return;
+
+    const particleCount = 30;
+
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.animationDelay = `${Math.random() * 15}s`;
+        particle.style.animationDuration = `${15 + Math.random() * 10}s`;
+        container.appendChild(particle);
+    }
+}
+
+// ============================================
+// 数字滚动动画
+// ============================================
+
+function initCountUp() {
+    const statNumbers = document.querySelectorAll('.stat-number');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const element = entry.target;
+                const target = parseInt(element.getAttribute('data-count'));
+                animateCount(element, target);
+                observer.unobserve(element);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    statNumbers.forEach(num => observer.observe(num));
+}
+
+function animateCount(element, target) {
+    let current = 0;
+    const duration = 2000;
+    const step = target / (duration / 16);
+
+    const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+            element.textContent = target;
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(current);
+        }
+    }, 16);
+}
+
+// ============================================
+// 平滑滚动
+// ============================================
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+            const headerOffset = 70;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
             });
         }
     });
 });
 
-// Header background change on scroll
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('.header');
-    if (window.scrollY > 100) {
-        header.style.background = 'rgba(255, 255, 255, 0.98)';
-        header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-    } else {
-        header.style.background = 'rgba(255, 255, 255, 0.95)';
-        header.style.boxShadow = 'none';
-    }
-});
+// ============================================
+// 页面加载完成后初始化
+// ============================================
 
-// Back to top button
-const backToTopButton = document.getElementById('backToTop');
-
-window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 300) {
-        backToTopButton.classList.add('visible');
-    } else {
-        backToTopButton.classList.remove('visible');
-    }
-});
-
-backToTopButton.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
-
-// Typing animation for hero title
-class TypeWriter {
-    constructor(txtElement, words, wait = 3000) {
-        this.txtElement = txtElement;
-        this.words = words;
-        this.txt = '';
-        this.wordIndex = 0;
-        this.wait = parseInt(wait, 10);
-        this.type();
-        this.isDeleting = false;
-    }
-
-    type() {
-        const current = this.wordIndex % this.words.length;
-        const fullTxt = this.words[current];
-
-        if (this.isDeleting) {
-            this.txt = fullTxt.substring(0, this.txt.length - 1);
-        } else {
-            this.txt = fullTxt.substring(0, this.txt.length + 1);
-        }
-
-        this.txtElement.innerHTML = `<span class="txt">${this.txt}</span>`;
-
-        let typeSpeed = 100;
-
-        if (this.isDeleting) {
-            typeSpeed /= 2;
-        }
-
-        if (!this.isDeleting && this.txt === fullTxt) {
-            typeSpeed = this.wait;
-            this.isDeleting = true;
-        } else if (this.isDeleting && this.txt === '') {
-            this.isDeleting = false;
-            this.wordIndex++;
-            typeSpeed = 500;
-        }
-
-        setTimeout(() => this.type(), typeSpeed);
-    }
-}
-
-// Initialize typing animation
-document.addEventListener('DOMContentLoaded', () => {
-    const txtElement = document.querySelector('.gradient-text');
-    const words = ['黄先生', '全栈开发者', '技术爱好者', '代码艺术家'];
-
-    if (txtElement) {
-        new TypeWriter(txtElement, words, 2000);
-    }
-});
-
-// Form submission
-const contactForm = document.querySelector('.contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        // Get form data
-        const formData = new FormData(contactForm);
-        const name = formData.get('name');
-        const email = formData.get('email');
-        const subject = formData.get('subject');
-        const message = formData.get('message');
-
-        // Basic validation
-        if (!name || !email || !subject || !message) {
-            alert('请填写所有必填字段！');
-            return;
-        }
-
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert('请输入有效的邮箱地址！');
-            return;
-        }
-
-        // Show success message (you can replace this with actual form submission)
-        alert('谢谢您的消息！我会尽快回复您。');
-        contactForm.reset();
-    });
-}
-
-// Intersection Observer for animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Animate elements on scroll
-document.addEventListener('DOMContentLoaded', () => {
-    const animateElements = document.querySelectorAll('.project-card, .skill-item, .contact-item, .stat');
-
-    animateElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
-});
-
-// Skills animation
-const skillTags = document.querySelectorAll('.skill-tag');
-skillTags.forEach((tag, index) => {
-    tag.style.animationDelay = `${index * 0.1}s`;
-    tag.classList.add('fade-in');
-});
-
-// Project card hover effects
-document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('mouseenter', () => {
-        card.style.transform = 'translateY(-10px) scale(1.02)';
-    });
-
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'translateY(0) scale(1)';
-    });
-});
-
-// Counter animation for stats
-function animateCounter(el, target) {
-    let current = 0;
-    const increment = target / 100;
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
-        el.textContent = Math.floor(current) + '+';
-    }, 20);
-}
-
-// Trigger counter animation when stats section is visible
-const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const counters = entry.target.querySelectorAll('.stat h4');
-            const targets = [50, 3, 100]; // Corresponding to the numbers in HTML
-
-            counters.forEach((counter, index) => {
-                animateCounter(counter, targets[index]);
-            });
-
-            statsObserver.unobserve(entry.target);
-        }
-    });
-}, observerOptions);
-
-const statsSection = document.querySelector('.about-stats');
-if (statsSection) {
-    statsObserver.observe(statsSection);
-}
-
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    const parallaxSpeed = 0.5;
-
-    if (hero && scrolled < hero.offsetHeight) {
-        hero.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
-    }
-});
-
-// Dynamic theme detection
-function detectSystemTheme() {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-    }
-    return 'light';
-}
-
-// Add some interactive particles to hero section
-function createParticles() {
-    const hero = document.querySelector('.hero');
-    const particleCount = 50;
-
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.cssText = `
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(102, 126, 234, 0.3);
-            border-radius: 50%;
-            top: ${Math.random() * 100}%;
-            left: ${Math.random() * 100}%;
-            animation: float ${3 + Math.random() * 4}s ease-in-out infinite;
-            animation-delay: ${Math.random() * 2}s;
-        `;
-        hero.appendChild(particle);
-    }
-}
-
-// Add CSS animation for particles
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-20px) rotate(180deg); }
-    }
-    
-    .fade-in {
-        animation: fadeIn 0.6s ease forwards;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .particle {
-        pointer-events: none;
-    }
-`;
-document.head.appendChild(style);
-
-// Initialize particles
-document.addEventListener('DOMContentLoaded', createParticles);
-
-// Easter egg: Konami code
-let konamiCode = [];
-const konamiSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // Up Up Down Down Left Right Left Right B A
-
-document.addEventListener('keydown', (e) => {
-    konamiCode.push(e.keyCode);
-    if (konamiCode.length > konamiSequence.length) {
-        konamiCode.shift();
-    }
-
-    if (konamiCode.toString() === konamiSequence.toString()) {
-        // Easter egg activated!
-        document.body.style.animation = 'rainbow 2s ease-in-out infinite';
-        setTimeout(() => {
-            document.body.style.animation = '';
-            alert('🎉 恭喜发现彩蛋！你是真正的开发者！');
-        }, 2000);
-        konamiCode = [];
-    }
-});
-
-// Add rainbow animation
-const rainbowStyle = document.createElement('style');
-rainbowStyle.textContent = `
-    @keyframes rainbow {
-        0% { filter: hue-rotate(0deg); }
-        100% { filter: hue-rotate(360deg); }
-    }
-`;
-document.head.appendChild(rainbowStyle);
+document.addEventListener('DOMContentLoaded', loadConfig);
